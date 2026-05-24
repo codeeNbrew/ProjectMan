@@ -31,7 +31,7 @@ class Hardware{
     }
 
     public function getjenisHardware(){
-        return $this->namaHardware;
+        return $this->jenisHardware;
     }
 
     public function getIpAddress(){
