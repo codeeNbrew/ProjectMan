@@ -42,19 +42,17 @@ class ProjectController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id_project = $_POST['id_project'];
             $nama = trim($_POST['namaHardware']);
-            $jenis = trim($_POST['jenisHardware']);
-            
-            $ip = trim($_POST['ipAddress']);
-            $user = trim($_POST['username']);
-            $pass = trim($_POST['password']);
+            $jenis = trim($_POST['jenisHardware']); 
 
-            $perangkatNonNetwork = ['rak server', 'server rack', 'kabel', 'fiber optic', 'pdu', 'ups', 'pipa'];
+            $perangkatNonNetwork = ['non network hardware'];
 
             if (in_array(strtolower($jenis), $perangkatNonNetwork)) {
-                $lokasiHw = $ip; 
+                $lokasiHw = trim($_POST['lokasiHardware']); 
                 $hardware = new NonNetworkDevice(null, $id_project, $nama, $jenis, $lokasiHw);
-                
             } else {
+                $ip = trim($_POST['ipAddress']);
+                $user = trim($_POST['username']);
+                $pass = trim($_POST['password']);
                 $hardware = new NetworkDevice(null, $id_project, $nama, $jenis, $ip, $user, $pass);
             }
 
@@ -71,17 +69,16 @@ class ProjectController {
             $id_project = $_POST['id_project'];
             $nama = trim($_POST['namaHardware']);
             $jenis = trim($_POST['jenisHardware']);
-            
-            $ip = trim($_POST['ipAddress']);
-            $user = trim($_POST['username']);
-            $pass = trim($_POST['password']);
 
-            $perangkatNonNetwork = ['rak server', 'server rack', 'kabel', 'fiber optic', 'pdu', 'ups', 'pipa'];
+            $perangkatNonNetwork = ['non network hardware'];
 
             if (in_array(strtolower($jenis), $perangkatNonNetwork)) {
-                $lokasiHw = $ip; 
+                $lokasiHw = trim($_POST['lokasiHardware']); 
                 $hardware = new NonNetworkDevice($id_hardware, $id_project, $nama, $jenis, $lokasiHw);
             } else {
+                $ip = trim($_POST['ipAddress']);
+                $user = trim($_POST['username']);
+                $pass = trim($_POST['password']);
                 $hardware = new NetworkDevice($id_hardware, $id_project, $nama, $jenis, $ip, $user, $pass);
             }
 

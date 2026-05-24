@@ -54,22 +54,33 @@ if ($tampilan === 'edit' && isset($_GET['id_hardware'])) {
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Jenis Hardware</label>
-                            <input type="text" name="jenisHardware" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <select id="jenisHardwareAdd" name="jenisHardware" required class="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500">
+                                <option value="Network Hardware">Network Hardware</option>
+                                <option value="Non Network Hardware">Non Network Hardware</option>
+                            </select>
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">IP Address</label>
-                        <input type="text" name="ipAddress" required class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono focus:ring-2 focus:ring-blue-500">
+
+                    <div id="grupNetworkAdd" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">IP Address</label>
+                            <input type="text" name="ipAddress" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Username</label>
+                                <input type="text" name="username" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                                <input type="text" name="password" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Username</label>
-                            <input type="text" name="username" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
-                            <input type="text" name="password" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                        </div>
+
+                    <div id="grupNonNetworkAdd" class="hidden">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Lokasi Hardware</label>
+                        <input type="text" name="lokasiHardware" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Contoh: Meja Server Lt. 2, Rak A, Lantai 1">
                     </div>
                     
                     <div class="mt-6">
@@ -92,22 +103,33 @@ if ($tampilan === 'edit' && isset($_GET['id_hardware'])) {
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Jenis Hardware</label>
-                            <input type="text" name="jenisHardware" value="<?= htmlspecialchars($dataEdit->getjenisHardware()) ?>" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <select id="jenisHardwareEdit" name="jenisHardware" required class="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500">
+                                <option value="Network Hardware" <?= ($dataEdit->getjenisHardware() === 'Network Hardware') ? 'selected' : '' ?>>Network Hardware</option>
+                                <option value="Non Network Hardware" <?= ($dataEdit->getjenisHardware() === 'Non Network Hardware') ? 'selected' : '' ?>>Non Network Hardware</option>
+                            </select>
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">IP Address</label>
-                        <input type="text" name="ipAddress" value="<?= htmlspecialchars($dataEdit->getIpAddress()) ?>" required class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono focus:ring-2 focus:ring-blue-500">
+
+                    <div id="grupNetworkEdit" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">IP Address</label>
+                            <input type="text" name="ipAddress" value="<?= ($dataEdit instanceof NetworkDevice) ? htmlspecialchars($dataEdit->getIpAddress()) : '' ?>" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Username</label>
+                                <input type="text" name="username" value="<?= ($dataEdit instanceof NetworkDevice) ? htmlspecialchars($dataEdit->getUsername()) : '' ?>" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                                <input type="text" name="password" value="<?= ($dataEdit instanceof NetworkDevice) ? htmlspecialchars($dataEdit->getPassword()) : '' ?>" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Username</label>
-                            <input type="text" name="username" value="<?= htmlspecialchars($dataEdit->getUsername()) ?>" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
-                            <input type="text" name="password" value="<?= htmlspecialchars($dataEdit->getPassword()) ?>" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                        </div>
+
+                    <div id="grupNonNetworkEdit" class="hidden">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Lokasi Hardware</label>
+                        <input type="text" name="lokasiHardware" value="<?= ($dataEdit instanceof NonNetworkDevice) ? htmlspecialchars($dataEdit->getLokasiHardware()) : '' ?>" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     </div>
                     
                     <div class="mt-6">
@@ -120,7 +142,7 @@ if ($tampilan === 'edit' && isset($_GET['id_hardware'])) {
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="p-6 border-b border-slate-200 flex flex-col md:flex-row justify-between items-center bg-slate-50 gap-4">
                     <div>
-                        <h2 class="text-2xl font-bold text-slate-800">Daftar Hardware & Konfigurasi IP</h2>
+                        <h2 class="text-2xl font-bold text-slate-800">Daftar Hardware & Konfigurasi</h2>
                         <p class="text-slate-500 text-sm mt-1">Project ID: <?= htmlspecialchars($id_project) ?></p>
                     </div>
                     <a href="index.php?action=detailProject&id=<?= htmlspecialchars($id_project) ?>&form=add" 
@@ -136,6 +158,7 @@ if ($tampilan === 'edit' && isset($_GET['id_hardware'])) {
                                 <th class="p-4 font-semibold">Nama Hardware</th>
                                 <th class="p-4 font-semibold">Jenis</th>
                                 <th class="p-4 font-semibold">IP Address</th>
+                                <th class="p-4 font-semibold">Lokasi Hardware</th>
                                 <th class="p-4 font-semibold">Username</th>
                                 <th class="p-4 font-semibold">Password</th>
                                 <th class="p-4 font-semibold text-center">Aksi</th>
@@ -144,16 +167,25 @@ if ($tampilan === 'edit' && isset($_GET['id_hardware'])) {
                         <tbody class="text-slate-700 text-sm">
                             <?php if (empty($hardwares)): ?>
                                 <tr>
-                                    <td colspan="6" class="p-8 text-center text-slate-400">Belum ada data hardware untuk project ini.</td>
+                                    <td colspan="7" class="p-8 text-center text-slate-400">Belum ada data hardware untuk project ini.</td>
                                 </tr>
                             <?php else: ?>
                                 <?php foreach ($hardwares as $h): ?>
                                 <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
                                     <td class="p-4 font-medium text-slate-900"><?= htmlspecialchars($h->getNamaHardware()) ?></td>
-                                    <td class="p-4"><?= htmlspecialchars($h->getjenisHardware()) ?></td>
-                                    <td class="p-4 font-mono text-blue-600"><?= htmlspecialchars($h->getIpAddress()) ?></td>
-                                    <td class="p-4"><?= htmlspecialchars($h->getUsername()) ?></td>
-                                    <td class="p-4"><?= htmlspecialchars($h->getPassword()) ?></td>
+                                    <td class="p-4">
+                                        <span class="px-2.5 py-1 text-xs font-semibold rounded-full <?= ($h instanceof NetworkDevice) ? 'bg-emerald-100 text-emerald-800' : 'bg-purple-100 text-purple-800' ?>">
+                                            <?= htmlspecialchars($h->getjenisHardware()) ?>
+                                        </span>
+                                    </td>
+                                    <td class="p-4 font-mono">
+                                        <?= ($h instanceof NetworkDevice) ? '<span class="text-emerald-600 font-semibold">' . htmlspecialchars($h->getIpAddress()) . '</span>' : '<span class="text-slate-300">-</span>' ?>
+                                    </td>
+                                    <td class="p-4 text-slate-600">
+                                        <?= ($h instanceof NonNetworkDevice) ? htmlspecialchars($h->getLokasiHardware()) : '<span class="text-slate-300">-</span>' ?>
+                                    </td>
+                                    <td class="p-4"><?= ($h instanceof NetworkDevice) ? htmlspecialchars($h->getUsername()) : '<span class="text-slate-300">-</span>' ?></td>
+                                    <td class="p-4"><?= ($h instanceof NetworkDevice) ? htmlspecialchars($h->getPassword()) : '<span class="text-slate-300">-</span>' ?></td>
                                     <td class="p-4 text-center space-x-3">
                                         <a href="index.php?action=detailProject&id=<?= htmlspecialchars($id_project) ?>&form=edit&id_hardware=<?= $h->getIdHardware() ?>" 
                                            class="text-amber-500 hover:text-amber-700 font-medium">Edit</a>
@@ -173,5 +205,44 @@ if ($tampilan === 'edit' && isset($_GET['id_hardware'])) {
         
     </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const jenisHardwareAdd = document.getElementById("jenisHardwareAdd");
+            const grupNetworkAdd = document.getElementById("grupNetworkAdd");
+            const grupNonNetworkAdd = document.getElementById("grupNonNetworkAdd");
+
+            if (jenisHardwareAdd) {
+                function sesuaikanFormAdd() {
+                    if (jenisHardwareAdd.value === "Network Hardware") {
+                        grupNetworkAdd.classList.remove("hidden");
+                        grupNonNetworkAdd.classList.add("hidden");
+                    } else {
+                        grupNetworkAdd.classList.add("hidden");
+                        grupNonNetworkAdd.classList.remove("hidden");
+                    }
+                }
+                jenisHardwareAdd.addEventListener("change", sesuaikanFormAdd);
+                sesuaikanFormAdd(); 
+            }
+
+            const jenisHardwareEdit = document.getElementById("jenisHardwareEdit");
+            const grupNetworkEdit = document.getElementById("grupNetworkEdit");
+            const grupNonNetworkEdit = document.getElementById("grupNonNetworkEdit");
+
+            if (jenisHardwareEdit) {
+                function sesuaikanFormEdit() {
+                    if (jenisHardwareEdit.value === "Network Hardware") {
+                        grupNetworkEdit.classList.remove("hidden");
+                        grupNonNetworkEdit.classList.add("hidden");
+                    } else {
+                        grupNetworkEdit.classList.add("hidden");
+                        grupNonNetworkEdit.classList.remove("hidden");
+                    }
+                }
+                jenisHardwareEdit.addEventListener("change", sesuaikanFormEdit);
+                sesuaikanFormEdit(); 
+            }
+        });
+    </script>
 </body>
 </html>

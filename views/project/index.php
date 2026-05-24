@@ -67,7 +67,6 @@ $tampilan = isset($_GET['form']) ? $_GET['form'] : 'grid';
                             <div>
                                 <div class="flex items-center justify-between mb-2">
                                     <h3 class="text-xl font-bold text-slate-800"><?= htmlspecialchars($p->getNamaProject()) ?></h3>
-                                    <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full font-semibold">ID: <?= $p->getIdProject() ?></span>
                                 </div>
                                 <div class="space-y-1 mb-4">
                                     <p class="text-sm text-slate-600"><span class="font-medium text-slate-500">Lokasi:</span> <?= htmlspecialchars($p->getLokasi()) ?></p>
