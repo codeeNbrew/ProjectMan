@@ -23,6 +23,21 @@ class ProjectController {
         require_once "views/project/detail.php";
     }
 
+    public function addProject() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $nama = trim($_POST['namaProject']);
+            $lokasi = trim($_POST['lokasi']);
+            $noClient = trim($_POST['noClient']);
+            $foto = trim($_POST['fotoTopologi']);
+            $project = new Project(null, $nama, $lokasi, $noClient, $foto);
+
+            if ($this->model->createProject($project)) {
+                header("Location: index.php?action=listProject");
+                exit;
+            }
+        }
+    }
+
     public function addHardware() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id_project = $_POST['id_project'];
@@ -34,7 +49,6 @@ class ProjectController {
 
             $hardware = new Hardware(null, $id_project, $nama, $jenis, $ip, $user, $pass);
 
-            // Suruh Model simpan ke database
             if ($this->model->createHardware($hardware)) {
                 header("Location: index.php?action=detailProject&id=" . $id_project);
                 exit;

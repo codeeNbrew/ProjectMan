@@ -20,7 +20,8 @@ class Model{
 
         if ($result->num_rows === 1) {
             $row = $result->fetch_assoc();
-                if (password_verify($password, $row['password'])) {
+            
+            if ($password === $row['password']) {
                 if (session_status() === PHP_SESSION_NONE) {
                     session_start();
                 }

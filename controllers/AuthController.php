@@ -16,7 +16,6 @@ class AuthController {
             $username = trim($_POST['username']);
             $password = trim($_POST['password']);
 
-            // Panggil mesin Model untuk cek ke database
             if ($this->model->login($username, $password)) {
                 header("Location: index.php?action=listProject");
                 exit;
