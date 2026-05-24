@@ -1,21 +1,16 @@
 <?php
 class Hardware{
-    private $id_hardware;
-    private $id_project;
-    private $namaHardware;
-    private $jenisHardware;
-    private $ipAddress;
-    private $username;
-    private $password;
+    protected $id_hardware;
+    protected $id_project;
+    protected $namaHardware;
+    protected $jenisHardware;
 
-    public function __construct($id_hardware, $id_project, $namaHardware, $jenisHardware, $ipAddress, $username, $password) {
+    public function __construct($id_hardware, $id_project, $namaHardware, $jenisHardware) {
         $this->id_hardware = $id_hardware;
         $this->id_project = $id_project;
         $this->namaHardware = $namaHardware;
         $this->jenisHardware = $jenisHardware;
-        $this->ipAddress = $ipAddress;
-        $this->username = $username;
-        $this->password = $password;
+
     }
 
     public function getIdHardware(){
@@ -34,18 +29,6 @@ class Hardware{
         return $this->jenisHardware;
     }
 
-    public function getIpAddress(){
-        return $this->ipAddress;
-    }
-
-    public function getUsername(){
-        return $this->username;
-    }
-
-    public function getPassword(){
-        return $this->password;
-    }
-
     public function setIdHardware($id_hardware){
         $this->id_hardware = $id_hardware;
     }
@@ -60,18 +43,6 @@ class Hardware{
 
     public function setjenisHardware($jenisHardware){
         $this->jenisHardware = $jenisHardware;
-    }
-
-    public function setIpAddress($ipAddress){
-        $this->ipAddress = $ipAddress;
-    }
-
-    public function setUsername($username){
-        $this->username = $username;
-    }
-
-    public function setPassword($password){
-        $this->password = $password;
     }
 
 }

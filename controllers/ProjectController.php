@@ -43,11 +43,20 @@ class ProjectController {
             $id_project = $_POST['id_project'];
             $nama = trim($_POST['namaHardware']);
             $jenis = trim($_POST['jenisHardware']);
+            
             $ip = trim($_POST['ipAddress']);
             $user = trim($_POST['username']);
             $pass = trim($_POST['password']);
 
-            $hardware = new Hardware(null, $id_project, $nama, $jenis, $ip, $user, $pass);
+            $perangkatNonNetwork = ['rak server', 'server rack', 'kabel', 'fiber optic', 'pdu', 'ups', 'pipa'];
+
+            if (in_array(strtolower($jenis), $perangkatNonNetwork)) {
+                $lokasiHw = $ip; 
+                $hardware = new NonNetworkDevice(null, $id_project, $nama, $jenis, $lokasiHw);
+                
+            } else {
+                $hardware = new NetworkDevice(null, $id_project, $nama, $jenis, $ip, $user, $pass);
+            }
 
             if ($this->model->createHardware($hardware)) {
                 header("Location: index.php?action=detailProject&id=" . $id_project);
@@ -62,11 +71,19 @@ class ProjectController {
             $id_project = $_POST['id_project'];
             $nama = trim($_POST['namaHardware']);
             $jenis = trim($_POST['jenisHardware']);
+            
             $ip = trim($_POST['ipAddress']);
             $user = trim($_POST['username']);
             $pass = trim($_POST['password']);
 
-            $hardware = new Hardware($id_hardware, $id_project, $nama, $jenis, $ip, $user, $pass);
+            $perangkatNonNetwork = ['rak server', 'server rack', 'kabel', 'fiber optic', 'pdu', 'ups', 'pipa'];
+
+            if (in_array(strtolower($jenis), $perangkatNonNetwork)) {
+                $lokasiHw = $ip; 
+                $hardware = new NonNetworkDevice($id_hardware, $id_project, $nama, $jenis, $lokasiHw);
+            } else {
+                $hardware = new NetworkDevice($id_hardware, $id_project, $nama, $jenis, $ip, $user, $pass);
+            }
 
             if ($this->model->updateHardware($hardware)) {
                 header("Location: index.php?action=detailProject&id=" . $id_project);

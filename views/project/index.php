@@ -75,7 +75,7 @@ $tampilan = isset($_GET['form']) ? $_GET['form'] : 'grid';
                                 </div>
                             </div>
                             <a href="index.php?action=detailProject&id=<?= $p->getIdProject() ?>" class="text-center w-full bg-slate-50 hover:bg-blue-50 text-blue-600 border border-blue-200 font-semibold py-2 rounded-xl transition mt-4">
-                                Buka Detail Hardware & IP
+                                Project Detail
                             </a>
                         </div>
                     <?php endforeach; ?>

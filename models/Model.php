@@ -2,6 +2,8 @@
 require_once "Project.php";
 require_once "Hardware.php";
 require_once "User.php";
+require_once "NetworkDevice.php";
+require_once "NonNetworkDevice.php";
 
 class Model{
     private $db;
@@ -21,7 +23,7 @@ class Model{
         if ($result->num_rows === 1) {
             $row = $result->fetch_assoc();
             
-            if ($password === $row['password']) {
+            if (password_verify($password, $row['password']) || $password === $row['password']) {
                 if (session_status() === PHP_SESSION_NONE) {
                     session_start();
                 }
@@ -104,15 +106,29 @@ class Model{
     public function createHardware(Hardware $hardware) {
         $id_project = $hardware->getIdProject();
         $nama = $hardware->getNamaHardware();
-        $jenis = $hardware->getjenisHardware();
-        $ip = $hardware->getIpAddress();
-        $user = $hardware->getUsername();
-        $pass = $hardware->getPassword();
+        $jenis = $hardware->getJenisHardware();
+        
+        if ($hardware instanceof NetworkDevice) {
+            $ip = $hardware->getIpAddress();
+            $user = $hardware->getUsername();
+            $pass = $hardware->getPassword();
+            $lokasiHw = null; 
+        } else {
+            $ip = null;
+            $user = null;
+            $pass = null;
+            
+            if ($hardware instanceof NonNetworkDevice) {
+                $lokasiHw = $hardware->getLokasiHardware();
+            } else {
+                $lokasiHw = null;
+            }
+        }
 
-        $query = "INSERT INTO hardware (id_project, namaHardware, jenisHardware, ipAddress, username, password) VALUES (?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO hardware (id_project, namaHardware, jenisHardware, ipAddress, username, password, lokasiHardware) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($query);
         
-        $stmt->bind_param("isssss", $id_project, $nama, $jenis, $ip, $user, $pass);
+        $stmt->bind_param("issssss", $id_project, $nama, $jenis, $ip, $user, $pass, $lokasiHw);
 
         if ($stmt->execute()) {
             return true;
@@ -130,15 +146,25 @@ class Model{
         $listHardware = [];
 
         while ($row = $result->fetch_assoc()) {
-            $hardwareObjek = new Hardware(
-                $row['id_hardware'],
-                $row['id_project'],
-                $row['namaHardware'],
-                $row['jenisHardware'],
-                $row['ipAddress'],
-                $row['username'],
-                $row['password']
-            );
+            if (!empty($row['ipAddress'])) {
+                $hardwareObjek = new NetworkDevice(
+                    $row['id_hardware'],
+                    $row['id_project'],
+                    $row['namaHardware'],
+                    $row['jenisHardware'],
+                    $row['ipAddress'],
+                    $row['username'],
+                    $row['password']
+                );
+            } else {
+                $hardwareObjek = new NonNetworkDevice(
+                    $row['id_hardware'],
+                    $row['id_project'],
+                    $row['namaHardware'],
+                    $row['jenisHardware'],
+                    $row['lokasiHardware']
+                );
+            }
             $listHardware[] = $hardwareObjek;
         }
 
@@ -148,15 +174,28 @@ class Model{
     public function updateHardware(Hardware $hardware) {
         $id_hardware = $hardware->getIdHardware();
         $nama = $hardware->getNamaHardware();
-        $jenis = $hardware->getjenisHardware();
-        $ip = $hardware->getIpAddress();
-        $user = $hardware->getUsername();
-        $pass = $hardware->getPassword();
+        $jenis = $hardware->getJenisHardware();
 
-        $query = "UPDATE hardware SET namaHardware = ?, jenisHardware = ?, ipAddress = ?, username = ?, password = ? WHERE id_hardware = ?";
+        if ($hardware instanceof NetworkDevice) {
+            $ip = $hardware->getIpAddress();
+            $user = $hardware->getUsername();
+            $pass = $hardware->getPassword();
+            $lokasiHw = null;
+        } else {
+            $ip = null;
+            $user = null;
+            $pass = null;
+            
+            if ($hardware instanceof NonNetworkDevice) {
+                $lokasiHw = $hardware->getLokasiHardware();
+            } else {
+                $lokasiHw = null;
+            }
+        }
+
+        $query = "UPDATE hardware SET namaHardware = ?, jenisHardware = ?, ipAddress = ?, username = ?, password = ?, lokasiHardware = ? WHERE id_hardware = ?";
         $stmt = $this->db->prepare($query);
-        
-        $stmt->bind_param("sssssi", $nama, $jenis, $ip, $user, $pass, $id_hardware);
+        $stmt->bind_param("ssssssi", $nama, $jenis, $ip, $user, $pass, $lokasiHw, $id_hardware);
 
         if ($stmt->execute()) {
             return true;
@@ -174,7 +213,5 @@ class Model{
         }
         return false;
     }
-
-    
 }
 ?>
