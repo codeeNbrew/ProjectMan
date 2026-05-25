@@ -28,10 +28,96 @@ class ProjectController {
             $nama = trim($_POST['namaProject']);
             $lokasi = trim($_POST['lokasi']);
             $noClient = trim($_POST['noClient']);
-            $foto = trim($_POST['fotoTopologi']);
-            $project = new Project(null, $nama, $lokasi, $noClient, $foto);
+            $namaFotoBaru = null;
+
+            if (isset($_FILES['fotoTopologi']) && $_FILES['fotoTopologi']['error'] === 0) {
+                $fileTmp = $_FILES['fotoTopologi']['tmp_name'];
+                $fileNamaAsli = $_FILES['fotoTopologi']['name'];
+                $ekstensi = pathinfo($fileNamaAsli, PATHINFO_EXTENSION);
+                
+                $namaFotoBaru = time() . '_' . uniqid() . '.' . $ekstensi;
+                
+                $targetFolder = "uploads/" . $namaFotoBaru;
+
+                if (!is_dir('uploads')) {
+                    mkdir('uploads', 0777, true);
+                }
+
+                move_uploaded_file($fileTmp, $targetFolder);
+            }
+
+            $project = new Project(null, $nama, $lokasi, $noClient, $namaFotoBaru);
 
             if ($this->model->createProject($project)) {
+                header("Location: index.php?action=listProject");
+                exit;
+            }
+        }
+    }
+
+    public function editProject() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id_project'];
+            $nama = trim($_POST['namaProject']);
+            $lokasi = trim($_POST['lokasi']);
+            $noClient = trim($_POST['noClient']);
+            
+            $projects = $this->model->readProject();
+            $fotoLama = null;
+            foreach ($projects as $p) {
+                if ($p->getIdProject() == $id) {
+                    $fotoLama = $p->getfotoTopologi();
+                    break;
+                }
+            }
+            
+            $namaFotoBaru = $fotoLama;
+
+            if (isset($_FILES['fotoTopologi']) && $_FILES['fotoTopologi']['error'] === 0) {
+                $fileTmp = $_FILES['fotoTopologi']['tmp_name'];
+                $fileNamaAsli = $_FILES['fotoTopologi']['name'];
+                $ekstensi = pathinfo($fileNamaAsli, PATHINFO_EXTENSION);
+                
+                $namaFotoBaru = time() . '_' . uniqid() . '.' . $ekstensi;
+                
+                $targetFolder = "uploads/" . $namaFotoBaru;
+
+                if (!is_dir('uploads')) {
+                    mkdir('uploads', 0777, true);
+                }
+
+                if (move_uploaded_file($fileTmp, $targetFolder)) {
+                    if (!empty($fotoLama) && file_exists("uploads/" . $fotoLama)) {
+                        unlink("uploads/" . $fotoLama);
+                    }
+                }
+            }
+
+            $project = new Project($id, $nama, $lokasi, $noClient, $namaFotoBaru);
+
+            if ($this->model->updateProject($project)) {
+                header("Location: index.php?action=listProject");
+                exit;
+            }
+        }
+    }
+
+    public function removeProject() {
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            
+            $projects = $this->model->readProject();
+            foreach ($projects as $p) {
+                if ($p->getIdProject() == $id) {
+                    $foto = $p->getfotoTopologi();
+                    if (!empty($foto) && file_exists("uploads/" . $foto)) {
+                        unlink("uploads/" . $foto);
+                    }
+                    break;
+                }
+            }
+
+            if ($this->model->deleteProject($id)) {
                 header("Location: index.php?action=listProject");
                 exit;
             }

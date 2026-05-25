@@ -1,8 +1,7 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-// ---------------------------------------
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -42,6 +41,16 @@ switch ($action) {
     case 'detailProject':
         $projectController = new ProjectController($model);
         $projectController->detailProject();
+        break;
+    
+    case 'editProject':
+        $projectController = new ProjectController($model);
+        $projectController->editProject();
+        break;
+
+    case 'deleteProject':
+        $projectController = new ProjectController($model);
+        $projectController->removeProject();
         break;
     
     case 'addHardware':
